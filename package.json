@@ -1,0 +1,21 @@
+{
+  "name": "cosmjs-sandbox",
+  "version": "1.0.0",
+  "description": "Experiment with simple CosmJS concepts.",
+  "main": "index.js",
+  "scripts": {
+    "generate":"ts-node generate_mnemonic.ts",
+    "with-stargate-client":"ts-node with-stargate-client.ts",
+    "with-signing-stargate-client":"ts-node with-signing-stargate-client.ts",
+    "mint_cft20":"ts-node mint_cft20.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "volcanicll",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-node": "10.7.0"
+  },
+  "dependencies": {
+    "@cosmjs/stargate": "0.32.3"
+  }
+}
