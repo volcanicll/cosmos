@@ -1,70 +1,112 @@
-import { DirectSecp256k1HdWallet, OfflineDirectSigner } from "@cosmjs/proto-signing"
-import { SigningStargateClient, StargateClient } from "@cosmjs/stargate"
-/* 钱包信息文件，助记词或私钥 */
-import { cft20_wallet } from "./wallets"
+import {
+  DirectSecp256k1HdWallet,
+  OfflineDirectSigner,
+} from "@cosmjs/proto-signing";
+import { SigningStargateClient, StargateClient } from "@cosmjs/stargate";
+/* wallet info, private keys or  */
+import { cft20_wallet, wallets, walletType } from "./wallets";
 
-// 测试RPC
-const testRpc = "https://rpc.sentry-01.theta-testnet.polypore.xyz"
+// test network RPC
+const testRpc = "https://rpc.sentry-01.theta-testnet.polypore.xyz";
 
-// 主网RPC   https://github.com/cosmos/chain-registry/blob/master/cosmoshub/chain.json
-const mainRpc = "https://rpc-cosmoshub.pupmos.network"
+// main network RPC   https://github.com/cosmos/chain-registry/blob/master/cosmoshub/chain.json
+const mainRpc = "https://rpc-cosmoshub.pupmos.network";
 
-// 测试
-const test = false
+// true for stop
+const test = false;
 
-// mint 次数
-const send_number = 100
+// number of times
+const send_number = 3;
 
 /* account */
 const account = [
-    {
-        denom: "uatom",
-        amount: "1",
-    },
-]
+  {
+    denom: "uatom",
+    amount: "1",
+  },
+];
 
 /* gas  */
 const gasFee = {
-    amount: [{ denom: "uatom", amount: "336" }],
-    gas: "67102",
-}
-/* cft20 mint信息，通过区块浏览器获取*/
-// const memo = "urn:cft20:cosmoshub-4@v1;mint$tic=ASTROBUD,amt=420000000"
-const memo = "urn:cft20:cosmoshub-4@v1;mint$tic=ATOVERSE,amt=2500000000"
+  amount: [{ denom: "uatom", amount: "336" }],
+  gas: "67132",
+};
+/* cft20 mint information，from https://www.mintscan.io/cosmos/tx */
+const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=ASTROBUD,amt=420000000";
+// const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=ATOVERSE,amt=2500000000"  // end
+// const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=FEPE,amt=1000000000";
+// const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=MOLECULE,amt=1000000000";
+// const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=STONER,amt=1000000000";
+// const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=BADDOG,amt=10000000000";
+// const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=COOK,amt=1000000000";
+// const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=RET,amt=1000000000";
+// const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=ASCII,amt=10000000000";
+// const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=ANIMALIA,amt=25250000000";
+// const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=1PIXEL,amt=1000000000";
+// const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=RETAIL,amt=1000000000";
+// const init_memo='pryzm1v8rzts7xvy2z2arnrn9cys63ekph69ndn6qrqv'  //toAddress cosmos1mrtta9zc0dsh30vfdqvfam8kwcgx6rgkam2jnu
 
-const getAliceSignerFromMnemonic = async (): Promise<OfflineDirectSigner> => {
-    return DirectSecp256k1HdWallet.fromMnemonic(cft20_wallet, {
-        prefix: "cosmos",
-    })
-}
+const getAliceSignerFromMnemonic = async (
+  wallet: string
+): Promise<OfflineDirectSigner> => {
+  return DirectSecp256k1HdWallet.fromMnemonic(wallet, {
+    prefix: "cosmos",
+  });
+};
 
-const runMint = async (): Promise<void> => {
-    const client = await StargateClient.connect(mainRpc)
+const runMint = async (props?: walletType): Promise<void> => {
+  const {
+    mnemonic = cft20_wallet,
+    times = send_number,
+    memo = init_memo,
+  } = props ?? {};
+  const client = await StargateClient.connect(mainRpc);
 
-    const aliceSigner: OfflineDirectSigner = await getAliceSignerFromMnemonic()
-    const alice = (await aliceSigner.getAccounts())[0].address
-    // 查看链ID，获取当前区块高度
-    console.log("With client, chain id:", await client.getChainId(), ", height:", await client.getHeight())
-    // 当前mint钱包地址
-    console.log("wallet address:", alice)
-    // 当前钱包余额
-    console.log("wallet balance before:", await client.getAllBalances(alice))
-    const signingClient = await SigningStargateClient.connectWithSigner(mainRpc, aliceSigner)
+  const aliceSigner: OfflineDirectSigner = await getAliceSignerFromMnemonic(
+    mnemonic
+  );
+  const alice = (await aliceSigner.getAccounts())[0].address;
+  // chain info
+  console.log(
+    "With client, chain id:",
+    await client.getChainId(),
+    ", height:",
+    await client.getHeight()
+  );
+  // wallet address
+  console.log("wallet address:", alice);
 
-    // 是否测试
-    if (test) {
-        return
+  // wallet balance before
+  console.log("wallet balance before:", await client.getAllBalances(alice));
+  const signingClient = await SigningStargateClient.connectWithSigner(
+    mainRpc,
+    aliceSigner
+  );
+
+  // true and stop
+  if (test) {
+    return;
+  }
+  console.log("start minting");
+  for (let index = 1; index <= times; index++) {
+    if (index <= times) {
+      await signingClient.sendTokens(alice, alice, account, gasFee, memo);
+      console.log("mint result:", "times of mint:  " + index);
+      console.log("block height:", await signingClient.getHeight());
     }
-    console.log("开始mint")
-    for (let index = 1; index <= send_number; index++) {
-        if (index <= send_number) {
-            await signingClient.sendTokens(alice, alice, account, gasFee, memo)
-            console.log("Transfer result:", "mint成功：" + index + "次")
-            console.log("block height:", await signingClient.getHeight())
-        }
-    }
-    console.log("结束mint")
-    console.log("wallet balance after:", await client.getAllBalances(alice))
-}
+  }
+  console.log("end mint");
+  console.log("wallet balance after:", await client.getAllBalances(alice));
+};
 
-runMint()
+const runBatchMint = () => {
+  wallets.map((wallet) => {
+    runMint({ ...wallet });
+  });
+};
+
+/* single wallet mint */
+runMint();
+
+/* multiple wallet mint */
+// runBatchMint();
