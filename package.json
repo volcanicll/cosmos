@@ -1,14 +1,16 @@
 {
-  "name": "cosmjs-sandbox",
+  "name": "mint-cft20",
   "version": "1.0.0",
-  "description": "Experiment with simple CosmJS concepts.",
+  "description": "Experiment to mint cft20 token on cosmos.",
   "main": "index.js",
   "scripts": {
-    "generate":"ts-node generate_mnemonic.ts",
-    "with-stargate-client":"ts-node with-stargate-client.ts",
-    "with-signing-stargate-client":"ts-node with-signing-stargate-client.ts",
-    "mint_cft20":"ts-node mint_cft20.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "generate": "ts-node generate_mnemonic.ts",
+    "with-stargate-client": "ts-node with-stargate-client.ts",
+    "with-signing-stargate-client": "ts-node with-signing-stargate-client.ts",
+    "mint_cft20": "ts-node mint_cft20.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "base58Touint8": "ts-node formatKey.ts",
+    "uint8ToBase58": "ts-node uint8ToBase58.ts"
   },
   "author": "volcanicll",
   "license": "ISC",
@@ -16,6 +18,9 @@
     "ts-node": "10.7.0"
   },
   "dependencies": {
-    "@cosmjs/stargate": "0.32.3"
+    "@cosmjs/stargate": "0.32.3",
+    "@solana/web3.js": "^1.91.4",
+    "bs58": "^5.0.0",
+    "fs": "^0.0.1-security"
   }
 }

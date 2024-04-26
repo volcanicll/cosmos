@@ -10,13 +10,14 @@ import { cft20_wallet, wallets, walletType } from "./wallets";
 const testRpc = "https://rpc.sentry-01.theta-testnet.polypore.xyz";
 
 // main network RPC   https://github.com/cosmos/chain-registry/blob/master/cosmoshub/chain.json
-const mainRpc = "https://rpc-cosmoshub.pupmos.network";
+// const mainRpc = "https://rpc-cosmoshub.pupmos.network";
+const mainRpc = "https://rpc-cosmoshub.whispernode.com:443";
 
 // true for stop
 const test = false;
 
 // number of times
-const send_number = 3;
+const send_number = 50;
 
 /* account */
 const account = [
@@ -32,7 +33,7 @@ const gasFee = {
   gas: "67132",
 };
 /* cft20 mint information，from https://www.mintscan.io/cosmos/tx */
-const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=ASTROBUD,amt=420000000";
+// const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=ASTROBUD,amt=420000000";
 // const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=ATOVERSE,amt=2500000000"  // end
 // const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=FEPE,amt=1000000000";
 // const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=MOLECULE,amt=1000000000";
@@ -44,6 +45,17 @@ const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=ASTROBUD,amt=420000000";
 // const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=ANIMALIA,amt=25250000000";
 // const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=1PIXEL,amt=1000000000";
 // const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=RETAIL,amt=1000000000";
+// const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=NUMBERS,amt=1234000000";
+// const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=CCREATOR,amt=1000000000";
+// const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=B10D20DOWN,amt=2000000000";
+// const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=AZZ,amt=5000000000";
+// const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=WOSM,amt=588000000";
+// const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=PHMN,amt=32000000";
+// const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=CAWS,amt=1000000000";
+// const init_memo =
+//   "urn:cft20:cosmoshub-4@v1;mint$tic=EXTRA,amt=10000000000000000";
+// const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=RET,amt=1000000000";
+const init_memo = "urn:cft20:cosmoshub-4@v1;mint$tic=DJM,amt=1000000000";
 // const init_memo='pryzm1v8rzts7xvy2z2arnrn9cys63ekph69ndn6qrqv'  //toAddress cosmos1mrtta9zc0dsh30vfdqvfam8kwcgx6rgkam2jnu
 
 const getAliceSignerFromMnemonic = async (
